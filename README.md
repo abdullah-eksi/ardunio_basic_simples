@@ -118,8 +118,8 @@ Bu projede bir RGB LED'in renklerini bir potansiyometre yardımıyla değiştire
 ```cpp
 // Pin Tanımlamaları
 const int redPin = 9;    // Kırmızı LED pin
-const int greenPin = 10; // Yeşil LED pin
-const int bluePin = 11;  // Mavi LED pin
+const int greenPin = 11; // Yeşil LED pin
+const int bluePin = 10;  // Mavi LED pin
 const int potPin = A0;   // Potansiyometre bağlı olduğu pin
 
 void setup() {
@@ -132,9 +132,23 @@ void loop() {
   int potValue = analogRead(potPin); // Potansiyometreden okunan değer (0-1023)
 
   // Potansiyometre değerini LED renklerine bölüştürme
-  int redValue = map(potValue, 0, 1023, 0, 255);   // Kırmızı parlaklık
-  int greenValue = map(potValue, 0, 1023, 255, 0); // Yeşil parlaklık
-  int blueValue = map(potValue, 0, 1023, 128, 255); // Mavi parlaklık (orta tonlardan başlar)
+  int redValue;
+  int greenValue;
+  int blueValue;
+
+  if (potValue <= 409) { // 0-409 aralığı (%40)
+    redValue = map(potValue, 0, 409, 0, 255); // Kırmızı parlaklık
+    greenValue = 0;
+    blueValue = 0;
+  } else if (potValue <= 716) { // 409-716 aralığı (%40-%70)
+    redValue = 0;
+    greenValue = map(potValue, 409, 716, 0, 255); // Yeşil parlaklık
+    blueValue = 0;
+  } else { // 716-1023 aralığı (%70-%100)
+    redValue = 0;
+    greenValue = 0;
+    blueValue = map(potValue, 716, 1023, 0, 255); // Mavi parlaklık
+  }
 
   // RGB LED renk ayarları
   analogWrite(redPin, redValue);
@@ -143,6 +157,7 @@ void loop() {
 
   delay(10); // Stabilite için kısa gecikme
 }
+
 ```
 
 ## 4 -
