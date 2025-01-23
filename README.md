@@ -662,10 +662,8 @@ Not: Bu örnek, anodik tip 7 segment ekranlar için geçerlidir. Eğer katotlu b
 
 ### Örnek Kodu:  
 ```cpp
-// 7 Segment ekran pin tanımlamaları
-int segmentPins[] = {2, 3, 4, 5, 6, 7, 8};  // A, B, C, D, E, F, G
+int segmentPins[] = {2, 3, 4, 5, 6, 7, 8}; // 7 segment pinleri
 
-// Sayıların 7 segment ekran üzerindeki segment kombinasyonları
 byte numbers[10] = {
   B00111111,  // 0
   B00000110,  // 1
@@ -680,26 +678,20 @@ byte numbers[10] = {
 };
 
 void setup() {
-  // 7 segment ekran pinlerini çıkış olarak ayarla
-  for (int i = 0; i < 7; i++) {
-    pinMode(segmentPins[i], OUTPUT);
-  }
+  for (int i = 0; i < 7; i++) pinMode(segmentPins[i], OUTPUT);
 }
 
 void loop() {
-  // Sayıları 0'dan 9'a kadar sırayla göster
-  for (int i = 0; i < 10; i++) {
-    // Sayıyı ekranda göstermek için 7 segment ekran pinlerini ayarla
-    for (int j = 0; j < 7; j++) {
-      if (bitRead(numbers[i], j)) {
-        digitalWrite(segmentPins[j], HIGH);  // Segmenti yak
-      } else {
-        digitalWrite(segmentPins[j], LOW);   // Segmenti söndür
-      }
+  for (int num = 0; num < 10; num++) { // 0'dan 9'a kadar sayıları sırayla göster
+    for (int i = 0; i < 7; i++) {
+      int state = bitRead(numbers[num], i); // İlgili segmentin durumunu al
+      digitalWrite(segmentPins[i], state); // Segmenti yak veya söndür
     }
-    delay(1000);  // 1 saniye bekle
+    delay(1000); // 1 saniye bekle
   }
 }
+
+
 
 ```
 
